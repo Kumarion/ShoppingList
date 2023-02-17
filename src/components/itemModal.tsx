@@ -39,11 +39,11 @@ const ItemModal: FC<ItemModalProps> = ({ setModalOpen, setItems, currentShopping
               </p>
 
               <div className="mb-3 pt-0">
-                <Input type="text" value={nameInput} onChange={(e) => setNameInput(e.target.value)} placeholder="Item name" className="px-2 py-3 placeholder-slate-500 text-slate-600 relative bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full"/>
+                <Input type="text" variant="outlined" value={nameInput} onChange={(e) => setNameInput(e.target.value)} label="Item name" className="px-2 py-3 placeholder-slate-500 text-slate-600 relative bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full"/>
               </div>
 
               <div className="mb-3 pt-0">
-                <Input type="number" value={quantityInput} onChange={(e) => setQuantityInput(parseInt(e.target.value))} placeholder="Item quantity" className="px-2 py-3 placeholder-slate-500 text-slate-600 relative bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full"/>
+                <Input type="number" variant="outlined" value={quantityInput} onChange={(e) => setQuantityInput(parseInt(e.target.value))} label="Item quantity" className="px-2 py-3 placeholder-slate-500 text-slate-600 relative bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full"/>
               </div>
             </div>
             {/*footer*/}
