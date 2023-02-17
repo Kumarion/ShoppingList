@@ -62,7 +62,8 @@ const ShoppingList: NextPage = () => {
 
   function getShoppingListNameFromId() {
     const shoppingList = shoppingLists.find((shoppingList) => shoppingList.id === currentShoppingListId);
-    return shoppingList?.name;
+    const shoppingListName = shoppingList?.name
+    return shoppingListName || "No list selected";
   };
 
   return (
