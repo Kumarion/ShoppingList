@@ -36,6 +36,18 @@ const ShoppingList: NextPage = () => {
     }
   );
 
+  const { mutate: deleteShoppingItem } = api.shoppingList.deleteShoppingListItem.useMutation({
+    onSuccess(data) {
+      setCurrentList((currentList) => currentList.filter((item) => item.id !== data.id));
+    }
+  });
+
+  const { mutate: deleteShoppingList } = api.shoppingList.deleteShoppingList.useMutation({
+    onSuccess(data) {
+      setShoppingLists((shoppingLists) => shoppingLists.filter((shoppingList) => shoppingList.id !== data.id));
+    }
+  });
+
   const {} = api.shoppingList.getShoppingListItems.useQuery({ shoppingListId: currentShoppingListId },
     {
       onSuccess(data) {
@@ -80,14 +92,18 @@ const ShoppingList: NextPage = () => {
                   <ul className = "overflow-y-scroll h-56">
                     {shoppingLists.length == 0 && <p className="text-white">No shopping lists</p>}
                     {shoppingListsData == null && <p className="text-white">No shopping lists</p>}
-                    {shoppingLists.map((shoppingList) => (
-                      <div title={"Created: " + shoppingList.createdAt.toDateString()} key={shoppingList.id}>
-                        <button onClick={() => handleShoppingListClick(shoppingList.id)} className = "align-middle hover:underline">{shoppingList.name}</button>
-                        <button className = "p-2 align-middle">
-                          <HiX className = "text-lg text-red-500" />
-                        </button>
-                      </div>
-                    ))}
+                    {shoppingLists.map((shoppingList) => {
+                      const { id, name, createdAt } = shoppingList;
+
+                      return (
+                        <div title={"Created: " + createdAt.toDateString()} key={id}>
+                          <button onClick={() => handleShoppingListClick(id)} className = "align-middle hover:underline">{name}</button>
+                          <button className = "p-2 align-middle">
+                            <HiX onClick={() => deleteShoppingList({id})} className = "text-lg text-red-500" />
+                          </button>
+                        </div>
+                      )
+                    })}
                   </ul>
                 </div>
               </div>
@@ -99,14 +115,18 @@ const ShoppingList: NextPage = () => {
                 <ul className = "">
                   {currentList.length == 0 && <p className="text-white">No items</p>}
                   {currentList == null && <p className="text-white">No items</p>}
-                  {currentList.map((item) => (
-                    <div key={item.id}>
-                      <a className = "align-middle">{item.name} - {item.quantity}x</a>
-                      <button className = "p-2 align-middle">
-                        <HiX className = "text-lg text-red-500" />
-                      </button>
-                    </div>
-                  ))}
+                  {currentList.map((item) => {
+                    const { id, name, quantity } = item;
+
+                    return (
+                      <div key={id}>
+                        <a className = "align-middle">{name} - {quantity}x</a>
+                        <button className = "p-2 align-middle">
+                          <HiX onClick={() => deleteShoppingItem({id})} className = "text-lg text-red-500" />
+                        </button>
+                      </div>
+                    )
+                  })}
                 </ul>
               </div>
             </div>

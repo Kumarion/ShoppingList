@@ -67,4 +67,34 @@ export const shoppingListRouter = createTRPCRouter({
         },
       });
   }),
+
+  // Deleting a shopping list item given the item id
+  deleteShoppingListItem: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.shoppingListItems.delete({
+        where: {
+          id: input.id,
+        },
+      });
+  }),
+
+  // Deleting a shopping list given the shopping list id
+  deleteShoppingList: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.shoppingLists.delete({
+        where: {
+          id: input.id,
+        },
+      });
+  }),
 });
