@@ -97,4 +97,23 @@ export const shoppingListRouter = createTRPCRouter({
         },
       });
   }),
+
+  // Toggle checked
+  toggleShoppingListItem: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        checked: z.boolean(),
+      })
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.shoppingListItems.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          checked: input.checked
+        },
+      });
+  }),
 });

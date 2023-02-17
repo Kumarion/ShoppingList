@@ -3,7 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { api } from "../utils/api";
-import { HiX } from "react-icons/hi";
+import { HiCheckCircle, HiX } from "react-icons/hi";
 import { useState } from "react";
 import { ShoppingListItems, ShoppingLists } from "@prisma/client";
 import ItemModal from "../components/itemModal";
@@ -23,10 +23,13 @@ const ShoppingList: NextPage = () => {
   const [isItemModalOpen, setItemModalOpen] = useState<boolean>(false);
   const [isListModalOpen, setListModalOpen] = useState<boolean>(false);
 
+  // Checked items state
+  const [checkedItems, setCheckedItems] = useState<ShoppingListItems[]>([]);
+
   const { data: shoppingListsData, isLoading } = api.shoppingList.getUserShoppingLists.useQuery({ userId: sessionData?.user?.id ?? "" },
     {
       onSuccess(data) {
-        setShoppingLists(data);
+        setShoppingLists(data);        
 
         // If there is no current list, set the first list as the current list
         if (currentShoppingListId === "") {
@@ -48,10 +51,25 @@ const ShoppingList: NextPage = () => {
     }
   });
 
+  const { mutate: toggleShoppingItem } = api.shoppingList.toggleShoppingListItem.useMutation({
+    onSuccess(shoppingItem) {
+      // check if this item is already checked
+      if (checkedItems.some((item) => item.id === shoppingItem.id)) {
+        // remove it from the checked items
+        setCheckedItems((prev) => prev.filter((item) => item.id !== shoppingItem.id))
+      } else {
+        // add it to the checked items
+        setCheckedItems((prev) => [...prev, shoppingItem])
+      };
+    }
+  });
+
   const {} = api.shoppingList.getShoppingListItems.useQuery({ shoppingListId: currentShoppingListId },
     {
       onSuccess(data) {
         setCurrentList(data);
+        const checked = data.filter((item) => item.checked);
+        setCheckedItems(checked);
       },
     }
   );
@@ -66,6 +84,10 @@ const ShoppingList: NextPage = () => {
     return shoppingListName || "No list selected";
   };
 
+  function checkedChanged() {
+
+  };
+  
   return (
     <>
       <Head>
@@ -103,7 +125,7 @@ const ShoppingList: NextPage = () => {
                             <HiX onClick={() => deleteShoppingList({id})} className = "text-lg text-red-500" />
                           </button>
                         </div>
-                      )
+                      );
                     })}
                   </ul>
                 </div>
@@ -117,16 +139,23 @@ const ShoppingList: NextPage = () => {
                   {currentList.length == 0 && <p className="text-white">No items</p>}
                   {currentList == null && <p className="text-white">No items</p>}
                   {currentList.map((item) => {
-                    const { id, name, quantity } = item;
+                    const { id, name, quantity, checked } = item;
 
                     return (
                       <div key={id}>
-                        <a className = "align-middle">{name} - {quantity}x</a>
+                        <input 
+                          type="checkbox"
+                          checked={checkedItems.some((item) => item.id === id)}
+                          onChange={() => checkedChanged()}
+                          onClick={() => toggleShoppingItem({id, checked: checkedItems.some((item) => item.id === id) ? false : true, })} 
+                          className="form-checkbox h-5 w-9 align-middle text-[hsl(280,100%,70%)]" 
+                        />
+                        <a className={checkedItems.some((item) => item.id === id) ? "align-middle line-through" : "align-middle"}>{name} - {quantity}x</a>
                         <button className = "p-2 align-middle">
                           <HiX onClick={() => deleteShoppingItem({id})} className = "text-lg text-red-500" />
                         </button>
                       </div>
-                    )
+                    );
                   })}
                 </ul>
               </div>
@@ -135,13 +164,19 @@ const ShoppingList: NextPage = () => {
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
             <div className="flex max-w-xl flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
-              <button onClick={() => setListModalOpen(true)} className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
+              <button 
+                onClick={() => setListModalOpen(true)} 
+                className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+              >
                 Add shopping list
               </button>
             </div>
 
             <div className="flex max-w-xl flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
-              <button onClick={() => setItemModalOpen(true)} className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20">
+              <button 
+                onClick={() => setItemModalOpen(true)} 
+                className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+              >
                 Add item
               </button>
             </div>
