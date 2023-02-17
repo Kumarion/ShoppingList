@@ -1,4 +1,4 @@
-import { Button, Input } from '@material-tailwind/react';
+import { Button } from '@material-tailwind/react';
 import { ShoppingListItems, ShoppingLists } from '@prisma/client'
 import { Dispatch, FC, SetStateAction, useState } from 'react'
 import { api } from '../utils/api';
@@ -40,7 +40,7 @@ const ListModal: FC<ItemModalProps> = ({ setModalOpen, setShoppingLists, setCurr
               </p>
 
               <div className="mb-3 pt-0">
-                <Input type="text" variant="outlined" value={nameInput} onChange={(e) => setNameInput(e.target.value)} label="Shopping list name" className="px-2 py-3 placeholder-slate-500 text-slate-600 relative bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full"/>
+                <input type="text" value={nameInput} onChange={(e) => setNameInput(e.target.value)} placeholder="Shopping list name" className="px-2 py-3 placeholder-slate-500 text-slate-600 relative bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full"/>
               </div>
             </div>
             {/*footer*/}
