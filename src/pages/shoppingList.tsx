@@ -8,6 +8,7 @@ import { useState } from "react";
 import { ShoppingListItems, ShoppingLists } from "@prisma/client";
 import ItemModal from "../components/itemModal";
 import ListModal from "../components/listModal";
+import { Button } from "@material-tailwind/react";
 
 const ShoppingList: NextPage = () => {
   const { data: sessionData } = useSession();
@@ -164,21 +165,21 @@ const ShoppingList: NextPage = () => {
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
             <div className="flex max-w-xl flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
-              <button 
+              <Button 
                 onClick={() => setListModalOpen(true)} 
                 className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
               >
                 Add shopping list
-              </button>
+              </Button>
             </div>
 
             <div className="flex max-w-xl flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
-              <button 
+              <Button 
                 onClick={() => setItemModalOpen(true)} 
                 className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
               >
                 Add item
-              </button>
+              </Button>
             </div>
           </div>
 

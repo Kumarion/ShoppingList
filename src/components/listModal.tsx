@@ -1,3 +1,4 @@
+import { Button } from '@material-tailwind/react';
 import { ShoppingListItems, ShoppingLists } from '@prisma/client'
 import { Dispatch, FC, SetStateAction, useState } from 'react'
 import { api } from '../utils/api';
@@ -44,14 +45,14 @@ const ListModal: FC<ItemModalProps> = ({ setModalOpen, setShoppingLists, setCurr
             </div>
             {/*footer*/}
             <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
-              <button
+              <Button
                 className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                 type="button"
                 onClick={() => setModalOpen(false)}
               >
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
                 className="bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                 type="button"
                 onClick={() => {
@@ -60,7 +61,7 @@ const ListModal: FC<ItemModalProps> = ({ setModalOpen, setShoppingLists, setCurr
                 }}
               >
                 Create
-              </button>
+              </Button>
             </div>
           </div>
         </div>
