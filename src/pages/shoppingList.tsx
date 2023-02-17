@@ -114,7 +114,7 @@ const ShoppingList: NextPage = () => {
                 <div className = "h-auto">
                   <ul className = "overflow-y-scroll h-56">
                     {shoppingLists.length == 0 && <p className="text-white">No shopping lists</p>}
-                    {shoppingListsData == null && <p className="text-white">No shopping lists</p>}
+                    {shoppingListsData == null && <p className="text-white">Loading...</p>}
                     {shoppingLists.map((shoppingList) => {
                       const { id, name, createdAt } = shoppingList;
 
@@ -137,7 +137,7 @@ const ShoppingList: NextPage = () => {
               <div className="text-lg">
                 <ul className = "">
                   {currentList.length == 0 && <p className="text-white">No items</p>}
-                  {currentList == null && <p className="text-white">No items</p>}
+                  {currentList == null && <p className="text-white">Loading...</p>}
                   {currentList.map((item) => {
                     const { id, name, quantity, checked } = item;
 
